@@ -1,0 +1,17 @@
+aspect_ratio: '16:9'
+canvas_main: ''
+cover_art: ''
+deploy_files: []
+deployed: Never
+engine_version: '0.26'
+flash_main: ''
+has_notifications: false
+is_multiplayer: false
+is_temp: false
+mapping_table: ''
+modified: 17:53 | 20/08/2013
+path: /home/jhammond/dev/ld27warmup/ld27warmup
+plugin_main: ''
+slug: ld27-warmup
+title: ld27 warmup
+title_logo: ''
