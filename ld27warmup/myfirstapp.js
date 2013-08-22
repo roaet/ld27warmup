@@ -7,6 +7,7 @@
 /*{{ javascript("jslib/boxtree.js") }}*/
 /*{{ javascript("jslib/physics2ddebugdraw.js") }}*/
 /*{{ javascript("jslib/textureeffects.js") }}*/
+/*{{ javascript("scripts/mobile.js") }}*/
 
 /*global TurbulenzEngine: true */
 /*global TurbulenzServices: false */
@@ -71,8 +72,6 @@ TurbulenzEngine.onload = function onloadFn() {
     inputDevice.addEventListener('keydown', onKeyDown);
 
 
-
-
     //==========================================================================
     // Physics2D/Draw2D
     //==========================================================================
@@ -98,17 +97,7 @@ TurbulenzEngine.onload = function onloadFn() {
         gravity : [0, 0]
     });
 
-    var heavyMaterial = phys2D.createMaterial({
-        density : 3
-    });
-
-    var shapeWidth = 0.6;
-    var shapeHeight = 0.8;
-    var shape = phys2D.createPolygonShape({
-        vertices : phys2D.createBoxVertices(shapeWidth, shapeHeight),
-        material : heavyMaterial
-    });
-
+    mob = new Mobile(phys2D);
 
     function reset() {
         world.clear();
@@ -132,18 +121,8 @@ TurbulenzEngine.onload = function onloadFn() {
             ]
         });
         world.addRigidBody(border);
+        world.addRigidBody(mob.getRigidBodyAt(stageWidth / 2, stageHeight / 2));
 
-        var body = phys2D.createRigidBody({
-            shapes : [shape.clone()],
-            position : [ stageWidth / 2, stageHeight / 2 ],
-            userData : Draw2DSprite.create({
-                width: shapeWidth,
-                height: shapeHeight,
-                origin : [ shapeWidth / 2, shapeHeight / 2],
-                color : [1.0, 0.0, 0.0, 1.0]
-            })
-        });
-        world.addRigidBody(body);
     }
 
     var realTime = 0;
@@ -171,30 +150,8 @@ TurbulenzEngine.onload = function onloadFn() {
             world.step(1 / 60);
         }
 
-        var bodies = world.rigidBodies;
-        var limit = bodies.length;
-        var i;
-
         draw2D.begin('alpha', 'deferred');
-        var pos = [];
-
-        for (i = 0; i < limit; i += 1) {
-            body = bodies[i];
-            if (body.userData) {
-                body.getPosition(pos);
-                var sprite = body.userData;
-                sprite.x = pos[0];
-                sprite.y = pos[1];
-                sprite.rotation = body.getRotation();
-                draw2D.drawSprite(sprite);
-                if (w_pressed) {
-                    body.setVelocity([0.0, 5.0]);
-                }
-                if (!w_pressed) {
-                    body.setVelocity([0.0, 0.0]);
-                }
-            }
-        }
+        mob.draw(draw2D);
         draw2D.end();
         gd.endFrame();
 
